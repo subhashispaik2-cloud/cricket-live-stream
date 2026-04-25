@@ -1,0 +1,21 @@
+name: UpdateStream
+on:
+  schedule:
+    - cron: '0 */6 * * *' # প্রতি ৬ ঘণ্টা পর আপডেট হবে
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Script
+        run: |
+          pip install requests
+          python update_stream.py
+      - name: Push Update
+        run: |
+          git config --global user.name "Bot"
+          git config --global user.email "bot@github.com"
+          git add index.html
+          git commit -m "Updated Link" || exit 0
+          git push
